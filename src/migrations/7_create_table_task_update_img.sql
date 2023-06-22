@@ -1,0 +1,1 @@
+create table task_update_images(id serial primary key, task_update_id integer references task_update(id), image_url varchar(1000), created_at timestamp, created_by varchar(255), updated_at timestamp, updated_by varchar(255))

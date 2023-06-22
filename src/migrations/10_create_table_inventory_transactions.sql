@@ -1,0 +1,1 @@
+create table inventory_transactions(id serial primary key, inventory_id integer references inventory(id), type varchar(10), quantity int, comment varchar(300),  created_at timestamp, created_by varchar(255), updated_at timestamp, updated_by varchar(255))

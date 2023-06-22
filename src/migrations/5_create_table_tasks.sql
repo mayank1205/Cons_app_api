@@ -1,0 +1,1 @@
+create table tasks(id serial primary key, name varchar(255), site_id integer references sites(id), category varchar(100), unit_of_work int, start_date timestamp, end_date timestamp, created_at timestamp, created_by varchar(255), updated_at timestamp, updated_by varchar(255))

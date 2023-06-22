@@ -1,0 +1,1 @@
+create table site_members(id serial primary key, site_id integer references sites(id), member_id integer references users(id), created_at timestamp, created_by varchar(255), updated_at timestamp, updated_by varchar(255))

@@ -1,0 +1,1 @@
+create table inventory_requests(id serial primary key, site_id integer references sites(id), assigned_to integer references users(id), request_date timestamp, delivery_date timestamp, status varchar(300),  created_at timestamp, created_by varchar(255), updated_at timestamp, updated_by varchar(255))
