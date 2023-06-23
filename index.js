@@ -5,11 +5,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const users = require('./src/Controllers/users');
+const users = require('./src/routes/users');
 
 // defining the Express app
 const app = express();
-
+require("dotenv").config();
 
 // adding Helmet to enhance your Rest API's security
 app.use(helmet());
@@ -23,8 +23,12 @@ app.use(cors());
 // adding morgan to log HTTP requests
 app.use(morgan('combined'));
 
+app.get('/', (req, res) => {
+  res.send('Hello World, from express');
+});
+
 // defining an endpoint to return all ads
-app.use('/users', users);
+app.use('', users);
 
 // starting the server
 app.listen(3001, () => {

@@ -1,1 +1,1 @@
-create table users(id serial primary key, name varchar(255), mobile BIGINT, email varchar(100), created_at timestamp, created_by varchar(255), updated_at timestamp, updated_by varchar(255))
+create table users(id serial primary key, name varchar(255), password varchar(1000), mobile BIGINT, email varchar(100), created_at timestamp default current_timestamp, created_by varchar(255), updated_at timestamp default current_timestamp, updated_by varchar(255))

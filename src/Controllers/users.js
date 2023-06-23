@@ -1,9 +1,18 @@
-const express = require('express');
-const router = express.Router();
+const db = require('../db/db');
 
-router.get('/', async (req, res) => {
 
-    res.send([]);
-});
+const getUsers = (req, res) => {
+    console.log("getusers")
+    db.select("id","name","mobile","email").from("users").orderBy('id', 'asc').then(data => {
+        res.json({
+          success: true,
+          data: data,
+          count: data.length
+        });
+      }).catch(err => {
+        console.log(err);
+        res.status(400).json(err)
+      });
+};
 
-module.exports = router;
+module.exports = {getUsers};
