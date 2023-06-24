@@ -15,4 +15,22 @@ const getUsers = (req, res) => {
       });
 };
 
-module.exports = {getUsers};
+const updateProfile = (req, res) => {
+  console.log("update profile")
+  const user = req.body;
+  db("users").update(user).where("id", "=", req.params.id).returning("*")
+  .then((resp) => {
+      res.send({
+          success: true,
+          message: 'user updated successfully',
+          data: resp[0]
+      });
+  }).catch(err => {
+      console.log(err);
+      res.status(400).json({
+          message: "unable to update user"
+      });
+  });
+};
+
+module.exports = {getUsers, updateProfile};

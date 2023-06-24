@@ -6,6 +6,9 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const users = require('./src/routes/users');
+const company = require('./src/routes/company');
+const sites = require('./src/routes/sites');
+const verifyToken = require('./src/middleware/verify');
 
 // defining the Express app
 const app = express();
@@ -29,6 +32,8 @@ app.get('/', (req, res) => {
 
 // defining an endpoint to return all ads
 app.use('', users);
+app.use('/company', verifyToken, company);
+app.use('/sites', verifyToken, sites);
 
 // starting the server
 app.listen(3001, () => {
