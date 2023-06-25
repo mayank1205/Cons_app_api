@@ -4,6 +4,8 @@ const db = require('../db/db');
 const createCompany = async (req, res) => {
     const company = req.body;
     company.user_id = req.userid;
+    company.created_by = req.username;
+    company.updated_by = req.username;
     let exists = await checkCompanyExists(req.userid,company.name);
     if(exists){
         res.json({
@@ -45,6 +47,8 @@ const createCompany = async (req, res) => {
   const updateCompany = (req, res) => {
     console.log("update company")
     const company = req.body;
+    company.updated_by = req.username;
+    company.updated_at = new Date();
     db("company").update(company).where("id", "=", req.params.id).returning("*")
     .then((resp) => {
         res.send({

@@ -1,1 +1,1 @@
-create table company(id serial primary key, name varchar(255), user_id integer references users(id), logo varchar(1000), created_at timestamp, created_by varchar(255), updated_at timestamp, updated_by varchar(255))
+create table company(id serial primary key, name varchar(255), user_id integer references users(id), logo varchar(1000), created_at timestamp default current_timestamp, created_by varchar(255), updated_at  timestamp default current_timestamp, updated_by varchar(255))

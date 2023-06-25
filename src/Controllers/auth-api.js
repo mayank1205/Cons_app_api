@@ -38,7 +38,7 @@ const signup = async (req, res) => {
         .where("mobile", "=", req.body.mobile)
         .returning("*").then( async user => {
           const token = jwt.sign(
-            { userid: user[0].id, mobile:user[0].mobile },
+            { userid: user[0].id, mobile:user[0].mobile, username: user[0].name },
             process.env.TOKEN_KEY,
             {
               expiresIn: "2h",

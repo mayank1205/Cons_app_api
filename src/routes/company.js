@@ -8,7 +8,7 @@ router.get('/', (req, res) => getCompanies(req, res))
   
 router.post('/', (req, res) => createCompany(req, res))
 
-router.put('/', (req, res) => updateCompany(req, res))
+router.put('/:id', (req, res) => updateCompany(req, res))
   
 
 module.exports = router;

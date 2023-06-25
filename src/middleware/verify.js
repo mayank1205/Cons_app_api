@@ -7,8 +7,8 @@ const verifyToken = (req, res, next) => {
     token = token.split(' ')[1];
     jwt.verify(token, process.env.TOKEN_KEY, function(err, decoded) {
       if (err) return res.status(401).send({ auth: false, message: 'Invalid token.' });
-      
-      req.email = decoded.email;
+      req.username = decoded.username;
+      req.usermobile = decoded.mobile;
       req.userid = decoded.userid;
       console.log(req.userid, req.email)
       next();

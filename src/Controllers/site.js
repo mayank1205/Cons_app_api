@@ -1,10 +1,15 @@
 const db = require('../db/db');
 
 
-const createSite = async (req, res) => {
+const createSite = (req, res) => {
     const site = req.body;
+    site.user_id = req.userid;
+    site.created_by = req.username;
+    site.updated_by = req.username;
     db("sites").insert(site).returning("*")
-    .then((resp) => {
+    .then(async (resp) => {
+      req.body.id = resp[0].id;
+      createSiteMember(req,res);
       res.send({
         success: true,
         message: 'Site created successfully',
@@ -18,9 +23,29 @@ const createSite = async (req, res) => {
     });
   }
 
+  const createSiteMember = (req,res) => {
+    let site_members = {};
+    site_members.updated_by = req.username;
+    site_members.created_by = req.username;
+    site_members.site_id = req.body.id;
+    site_members.member_id = req.userid;
+    site_members.role = 'Admin';
+    db("site_members").insert(site_members).returning("*")
+    .then((resp) => {
+      //
+    }).catch(err => {
+      console.log(err);
+      res.status(400).json({
+        message: "unable to create site"
+      });
+    });
+  }
+
   const updateSite = (req, res) => {
     console.log("update site")
     const site = req.body;
+    site.updated_by = req.username;
+    site.updated_at = new Date();
     db("sites").update(site).where("id", "=", req.params.id).returning("*")
     .then((resp) => {
         res.send({
