@@ -87,7 +87,7 @@ const getSiteDetails = (req, res) => {
 
   let userid = req.userid;
     console.log(userid)
-    db.select("sites.*").from("site_members").andWhere("sites.id", "=", req.params.id).innerJoin('sites', 'sites.id', 'site_members.site_id').where("member_id", "=",userid).orderBy('id', 'asc').then(data => {
+    db.select("sites.*").from("site_members").innerJoin('sites', 'sites.id', 'site_members.site_id').where("member_id", "=",userid).andWhere("sites.id", "=", req.params.id).orderBy('id', 'asc').then(data => {
       if(data.length < 1){
         res.json({
           success: true,
