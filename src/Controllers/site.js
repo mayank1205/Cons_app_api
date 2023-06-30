@@ -121,4 +121,26 @@ const getSiteDetails = (req, res) => {
     console.log("getSiteDetails")
 };
 
-module.exports = {getSites, createSite, updateSite, getSiteDetails};
+
+const getSiteMembers = (req, res) => {
+  let siteid = req.params.id;
+  db.select(["users.name", "users.email", "users.id", "users.mobile"]).from("site_members").innerJoin('users', 'users.id', 'site_members.member_id').where("site_members.site_id", "=",siteid).orderBy('users.id', 'asc').then(data => {
+    if(data.length < 1){
+      res.json({
+        success: true,
+        data: [],
+        message: "No members Found."
+      });
+    }
+    res.json({
+      success: true,
+      data: data,
+      count: data.length
+    });
+  }).catch(err => {
+    console.log(err);
+    res.status(400).json(err)
+  });
+};
+
+module.exports = {getSites, createSite, updateSite, getSiteDetails, getSiteMembers};
