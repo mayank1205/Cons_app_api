@@ -42,22 +42,37 @@ const createSite = (req, res) => {
   }
 
   const updateSite = (req, res) => {
-    console.log("update site")
-    const site = req.body;
-    site.updated_by = req.username;
-    site.updated_at = new Date();
-    db("sites").update(site).where("id", "=", req.params.id).returning("*")
-    .then((resp) => {
-        res.send({
-            success: true,
-            message: 'site updated successfully',
-            data: resp[0]
+    let userid = req.userid;
+    db.select("*").from("site_members").where("member_id", "=",userid).orderBy('id', 'asc').then(data => {
+      if(data.length < 1){
+        res.json({
+          success: false,
+          data: [],
+          message: "No Access to update site."
         });
+      }
+      else {
+        console.log("update site")
+        const site = req.body;
+        site.updated_by = req.username;
+        site.updated_at = new Date();
+        db("sites").update(site).where("id", "=", req.params.id).returning("*")
+        .then((resp) => {
+            res.send({
+                success: true,
+                message: 'site updated successfully',
+                data: resp[0]
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(400).json({
+                message: "unable to update site"
+            });
+        });
+      }
     }).catch(err => {
-        console.log(err);
-        res.status(400).json({
-            message: "unable to update site"
-        });
+      console.log(err);
+      res.status(400).json(err)
     });
   };
 
@@ -90,7 +105,7 @@ const getSiteDetails = (req, res) => {
     db.select("sites.*").from("site_members").innerJoin('sites', 'sites.id', 'site_members.site_id').where("member_id", "=",userid).andWhere("sites.id", "=", req.params.id).orderBy('id', 'asc').then(data => {
       if(data.length < 1){
         res.json({
-          success: true,
+          success: false,
           data: null,
           message: "No Site Found with this ID."
         });
