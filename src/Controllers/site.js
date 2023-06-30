@@ -24,13 +24,13 @@ const createSite = (req, res) => {
   }
 
   const createSiteMember = (req,res) => {
-    let site_members = {};
+    let site_member = {};
     site_members.updated_by = req.username;
     site_members.created_by = req.username;
     site_members.site_id = req.body.id;
     site_members.member_id = req.userid;
     site_members.role = 'Admin';
-    db("site_members").insert(site_members).returning("*")
+    db("site_members").insert(site_member).returning("*")
     .then((resp) => {
       //
     }).catch(err => {
@@ -62,30 +62,48 @@ const createSite = (req, res) => {
   };
 
 const getSites = (req, res) => {
-    console.log("getSites")
-    db.select("*").from("sites").orderBy('id', 'asc').then(data => {
+    let userid = req.userid;
+    console.log(userid)
+    db.select("sites.*").from("site_members").innerJoin('sites', 'sites.id', 'site_members.site_id').where("member_id", "=",userid).orderBy('id', 'asc').then(data => {
+      if(data.length < 1){
         res.json({
           success: true,
-          data: data,
-          count: data.length
+          data: [],
+          message: "No Sites Found."
         });
-      }).catch(err => {
-        console.log(err);
-        res.status(400).json(err)
-      });
-};
-
-const getSiteDetails = (req, res) => {
-  console.log("getSiteDetails")
-  db.select("*").from("sites").where("id", "=", req.params.id).orderBy('id', 'asc').then(data => {
+      }
       res.json({
         success: true,
-        data: data
+        data: data,
+        count: data.length
       });
     }).catch(err => {
       console.log(err);
       res.status(400).json(err)
     });
+};
+
+const getSiteDetails = (req, res) => {
+
+  let userid = req.userid;
+    console.log(userid)
+    db.select("sites.*").from("site_members").andWhere("sites.id", "=", req.params.id).innerJoin('sites', 'sites.id', 'site_members.site_id').where("member_id", "=",userid).orderBy('id', 'asc').then(data => {
+      if(data.length < 1){
+        res.json({
+          success: true,
+          data: null,
+          message: "No Site Found with this ID."
+        });
+      }
+      res.json({
+        success: true,
+        data: data[0]
+      });
+    }).catch(err => {
+      console.log(err);
+      res.status(400).json(err)
+    });
+    console.log("getSiteDetails")
 };
 
 module.exports = {getSites, createSite, updateSite, getSiteDetails};

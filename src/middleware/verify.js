@@ -10,7 +10,6 @@ const verifyToken = (req, res, next) => {
       req.username = decoded.username;
       req.usermobile = decoded.mobile;
       req.userid = decoded.userid;
-      console.log(req.userid, req.email)
       next();
     });
 }
